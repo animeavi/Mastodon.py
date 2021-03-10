@@ -1381,45 +1381,45 @@ class Mastodon:
     # Streaming
     ###
     @api_version("1.1.0", "1.4.2")    
-    def stream_user(self, listener, async=False):
+    def stream_user(self, listener, reconnect_async=False):
         """
         Streams events that are relevant to the authorized user, i.e. home
         timeline and notifications.
         """
-        return self.__stream('/api/v1/streaming/user', listener, async=async)
+        return self.__stream('/api/v1/streaming/user', listener, reconnect_async=reconnect_async)
 
     @api_version("1.1.0", "1.4.2")
-    def stream_public(self, listener, async=False):
+    def stream_public(self, listener, reconnect_async=False):
         """
         Streams public events.
         """
-        return self.__stream('/api/v1/streaming/public', listener, async=async)
+        return self.__stream('/api/v1/streaming/public', listener, reconnect_async=reconnect_async)
 
     @api_version("1.1.0", "1.4.2")
-    def stream_local(self, listener, async=False):
+    def stream_local(self, listener, reconnect_async=False):
         """
         Streams local public events.
         """
-        return self.__stream('/api/v1/streaming/public/local', listener, async=async)
+        return self.__stream('/api/v1/streaming/public/local', listener, reconnect_async=reconnect_async)
 
     @api_version("1.1.0", "1.4.2")
-    def stream_hashtag(self, tag, listener, async=False):
+    def stream_hashtag(self, tag, listener, reconnect_async=False):
         """
         Stream for all public statuses for the hashtag 'tag' seen by the connected
         instance.
         """
         if tag.startswith("#"):
             raise MastodonIllegalArgumentError("Tag parameter should omit leading #")
-        return self.__stream("/api/v1/streaming/hashtag?tag={}".format(tag), listener, async=async)
+        return self.__stream("/api/v1/streaming/hashtag?tag={}".format(tag), listener, reconnect_async=reconnect_async)
 
     @api_version("2.1.0", "2.1.0")
-    def stream_list(self, id, listener, async=False):
+    def stream_list(self, id, listener, reconnect_async=False):
         """
         Stream events for the current user, restricted to accounts on the given
         list. 
         """
         id =  self.__unpack_id(id)
-        return self.__stream("/api/v1/streaming/list?list={}".format(id), listener, async=async)
+        return self.__stream("/api/v1/streaming/list?list={}".format(id), listener, reconnect_async=reconnect_async)
     
     ###
     # Internal helpers, dragons probably
@@ -1661,7 +1661,7 @@ class Mastodon:
 
         return response
 
-    def __stream(self, endpoint, listener, params={}, async=False):
+    def __stream(self, endpoint, listener, params={}, reconnect_async=False):
         """
         Internal streaming API helper.
 
@@ -1720,7 +1720,7 @@ class Mastodon:
 
         handle = __stream_handle(connection)
 
-        if async:
+        if reconnect_async:
             t = threading.Thread(args=(), daemon = True, target=handle._threadproc)
             t.start()
             return handle
