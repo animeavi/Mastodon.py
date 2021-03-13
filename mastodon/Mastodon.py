@@ -1257,7 +1257,7 @@ class Mastodon:
     # Writing data: Media
     ###
     @api_version("1.0.0", "2.0.0")
-    def media_post(self, media_file, mime_type=None, description=None):
+    def media_post(self, media_file, mime_type=None, description=None, file_name=None):
         """
         Post an image. `media_file` can either be image data or
         a file name. If image data is passed directly, the mime
@@ -1280,8 +1280,9 @@ class Mastodon:
                                                'without mime type.')
 
         random_suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        file_name = "mastodonpyupload_" + str(time.time()) + "_" + str(random_suffix) + mimetypes.guess_extension(
-            mime_type)
+        if file_name is None:
+            file_name = "mastodonpyupload_" + str(time.time()) + "_" + str(random_suffix) + mimetypes.guess_extension(
+                mime_type)
 
         media_file_description = (file_name, media_file, mime_type)
         return self.__api_request('POST', '/api/v1/media',
