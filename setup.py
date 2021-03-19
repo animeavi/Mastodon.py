@@ -6,7 +6,7 @@ extras = {
 }
 
 setup(name='Mastodon.py',
-      version='1.2.3',
+      version='1.2.4',
       description='Python wrapper for the Mastodon API',
       packages=['mastodon'],
       setup_requires=['pytest-runner'],

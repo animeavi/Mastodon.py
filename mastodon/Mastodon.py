@@ -7,6 +7,7 @@ import time
 import random
 import string
 import datetime
+from datetime import timezone
 from contextlib import closing
 import pytz
 import requests
@@ -1279,10 +1280,9 @@ class Mastodon:
                                                ' or data passed directly '
                                                'without mime type.')
 
-        random_suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
         if file_name is None:
-            file_name = "mastodonpyupload_" + str(time.time()) + "_" + str(random_suffix) + mimetypes.guess_extension(
-                mime_type)
+            time_utc = datetime.datetime.utcnow().replace(tzinfo=timezone.utc).strftime('%Y%m%d%H%M%S')
+            file_name = time_utc + mimetypes.guess_extension(mime_type)
 
         media_file_description = (file_name, media_file, mime_type)
         return self.__api_request('POST', '/api/v1/media',
