@@ -7,6 +7,7 @@ import time
 import random
 import string
 import datetime
+from datetime import timezone
 import collections
 from contextlib import closing
 import pytz
@@ -2490,9 +2491,8 @@ class Mastodon:
                                                'without mime type.')
 
         if file_name is None:
-            random_suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-            file_name = "mastodonpyupload_" + str(time.time()) + "_" + str(random_suffix) + mimetypes.guess_extension(
-                mime_type)
+            time_utc = datetime.datetime.utcnow().replace(tzinfo=timezone.utc).strftime('%Y%m%d%H%M%S')
+            file_name = time_utc + mimetypes.guess_extension(mime_type)
 
         if focus != None:
             focus = str(focus[0]) + "," + str(focus[1])
