@@ -216,12 +216,6 @@ to server misconfiguration.
 
 `MastodonVersionError` is raised when a version check for an API call fails.
 
-A brief note on block lists
----------------------------
-The default distribution of Mastodon.py prevents you from logging in to instances on a very short list of domains. The purpose of this is to disassociate the developers of Mastodon.py from these instances and to disavow the ideology of violence that they represent. You could, of course, take that part out - Mastodon.py is free software, and you have the right to modify it to suit your needs.
-
-While you take the extra step of removing the code, please take a moment to consider why reasonable people whose work you build and depend on every day thought it was necessary to put it in to begin with.
-
 Return values
 -------------
 Unless otherwise specified, all data is returned as Python dictionaries, matching
