@@ -9,6 +9,7 @@ import time
 import random
 import string
 import datetime
+from datetime import timezone
 import collections
 from contextlib import closing
 import pytz
@@ -4047,10 +4048,8 @@ class Mastodon:
             raise MastodonIllegalArgumentError(
                 'Could not determine mime type or data passed directly without mime type.')
         if file_name is None:
-            random_suffix = uuid.uuid4().hex
-            file_name = "mastodonpyupload_" + \
-                str(time.time()) + "_" + str(random_suffix) + \
-                mimetypes.guess_extension(mime_type)
+            time_utc = datetime.datetime.utcnow().replace(tzinfo=timezone.utc).strftime('%Y%m%d%H%M%S')
+            file_name = time_utc + mimetypes.guess_extension(mime_type)
         return (file_name, media_file, mime_type)
 
     @staticmethod
